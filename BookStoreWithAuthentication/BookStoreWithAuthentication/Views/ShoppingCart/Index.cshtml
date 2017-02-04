@@ -57,7 +57,8 @@
             @item.Count
         </td>
         <td>
-            <a href="#" class="RemoveLink" data-id="@item.Id">Remove from cart</a>
+            <a href="#" class="RemoveLink" data-id="@item.BookId">Remove from cart</a>
+            @Html.ActionLink("Usuń z koszyka", "test", "ShoppingCart", new { id = item.Id}, "")
         </td>
     </tr>
 }
