@@ -24,16 +24,23 @@ namespace BookStoreWithAuthentication.Controllers
         public ActionResult AddressAndPayment(FormCollection values)
         {
             var order = new Order();
-            order.Username = User.Identity.Name;
-            order.OrderDate = DateTime.Now;
+            TryUpdateModel(order);
 
-            db.Orders.Add(order);
-            db.SaveChanges();
+            try
+            {
+                order.Username = User.Identity.Name;
+                order.OrderDate = DateTime.Now; 
 
-            var cart = ShoppingCart.GetCart(this.HttpContext);
-            cart.CreateOrder(order);
+                var cart = ShoppingCart.GetCart(this.HttpContext);
+                cart.CreateOrder(order);
 
-            return RedirectToAction("Complete", new { id = order.OrderId });
+                return RedirectToAction("Complete", new { id = order.OrderId });
+            }
+            catch
+            {
+                return View(order);
+            }
+
         }
 
         //GET: /Checkout/Complete

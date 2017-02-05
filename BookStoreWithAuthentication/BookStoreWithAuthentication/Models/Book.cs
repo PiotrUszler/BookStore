@@ -13,8 +13,8 @@ namespace BookStoreWithAuthentication.Models
         public string Title { get; set; }
         [Display(Name = "Ilość stron")]
         public int NumOfPages { get; set; }
-        public decimal Price { get; set; }
         [Display(Name = "Cena")]
+        public decimal Price { get; set; }
         public string ImagePath { get; set; }
         [Display(Name = "Kategoria")]
         public int CategoryID { get; set; }

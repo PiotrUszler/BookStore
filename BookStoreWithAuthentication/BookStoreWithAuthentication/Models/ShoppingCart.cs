@@ -115,7 +115,9 @@ namespace BookStoreWithAuthentication.Models
                 orderTotal += (item.Count * item.Book.Price);
                 db.OrderDetails.Add(orderDetails);
             }
-            order.Total = orderTotal;
+
+            order.Total = (decimal)orderTotal;
+            db.Orders.Add(order);
             db.SaveChanges();
             EmptyCart();
             return order.OrderId;

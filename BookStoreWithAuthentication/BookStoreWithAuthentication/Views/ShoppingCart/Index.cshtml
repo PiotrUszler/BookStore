@@ -28,19 +28,19 @@
     Koszyk
 </h3>
 <p class="button">
-    @Html.ActionLink("Checkout", "AddresAndPayment", "Checkout")
+    @Html.ActionLink("Do kasy", "AddressAndPayment", "Checkout")
 </p>
 <div id="update-message"></div>
 <table class="table">
     <tr>
         <th>
-            Book title
+            Tytuł książki
         </th>
         <th>
-            Price (each)
+            Cena
         </th>
         <th>
-            Quantity
+            Ilość
         </th>
         <th></th>
     </tr>
@@ -57,13 +57,13 @@
             @item.Count
         </td>
         <td>
-            <a href="" class="RemoveLink" data-id="@item.BookId">Remove from cart</a>
+            <a href="" class="RemoveLink" data-id="@item.BookId">Usuń z koszyka</a>
         </td>
     </tr>
 }
     <tr>
         <td>
-            Total
+            Suma
         </td>
         <td></td>
         <td></td>
