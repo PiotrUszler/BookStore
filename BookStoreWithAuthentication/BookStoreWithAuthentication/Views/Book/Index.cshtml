@@ -9,13 +9,20 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+@using (Html.BeginForm())
+{
+    <p>
+        Szukaj: @Html.TextBox("search")
+        <input type="submit" value="search" />
+    </p>
+}
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ImagePath)
+           
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.ActionLink("Tytuł", "Index", new { sortOrder = ViewBag.NameSortParam})
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Category.Name)
@@ -24,7 +31,7 @@
             @Html.DisplayNameFor(model => model.Authors)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Price)
+            @Html.ActionLink("Cena", "Index", new { sortOrder = ViewBag.PriceSortParam})
         </th>
     </tr>
 

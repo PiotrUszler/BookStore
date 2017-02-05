@@ -16,9 +16,37 @@ namespace BookStoreWithAuthentication.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Book
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string search)
         {
+            ViewBag.NameSortParam = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewBag.PriceSortParam = sortOrder == "price" ? "price_desc" : "price";
+
             var books = db.Books.Include(b => b.Category).Include(b => b.Publisher).Include(b => b.Series);
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                books = books.Where(
+                    s => s.Title.Contains(search) || 
+                    s.Category.Name.Contains(search) || 
+                    s.Authors.Any(a => a.FirstName.Contains(search) || a.LastName.Contains(search))
+                    );
+            }
+
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    books = books.OrderByDescending(b => b.Title);
+                    break;
+                case "price_desc":
+                    books = books.OrderByDescending(b => b.Price);
+                    break;
+                case "price":
+                    books = books.OrderBy(b => b.Price);
+                    break;
+                default:
+                    books = books.OrderBy(b => b.Title);
+                    break;
+            }
             return View(books.ToList());
         }
 
