@@ -16,6 +16,10 @@ namespace BookStoreWithAuthentication.Controllers
         //Get: /Checkout/AddressAndPayment
         public ActionResult AddressAndPayment()
         {
+            var user = db.Users.Single(u => u.UserName == User.Identity.Name);
+            ViewBag.FirstName = user.FirstName;
+            ViewBag.LastName = user.LastName;
+            ViewBag.Email = user.Email;
             return View();
         }
 

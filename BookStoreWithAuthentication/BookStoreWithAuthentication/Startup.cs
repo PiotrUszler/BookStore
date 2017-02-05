@@ -31,6 +31,8 @@ namespace BookStoreWithAuthentication
                 var user = new ApplicationUser();
                 user.UserName = "admin@poczta.pl";
                 user.Email = "admin@poczta.pl";
+                user.FirstName = "Adminek";
+                user.LastName = "Adminowski";
                 string userPass = "Haslo123";
 
                 var chkUser = userManager.Create(user, userPass);
