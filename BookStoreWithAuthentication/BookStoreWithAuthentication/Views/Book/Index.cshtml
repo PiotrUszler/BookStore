@@ -1,4 +1,6 @@
-﻿@model IEnumerable<BookStoreWithAuthentication.Models.Book>
+﻿@model PagedList.IPagedList<BookStoreWithAuthentication.Models.Book>
+
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Index";
@@ -9,11 +11,11 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "Book", FormMethod.Get))
 {
     <p>
-        Szukaj: @Html.TextBox("search")
-        <input type="submit" value="search" />
+        @Html.TextBox("search", ViewBag.CurrentFilter as string)
+        <input type="submit" value="szukaj" />
     </p>
 }
 <table class="table">
@@ -22,16 +24,16 @@
            
         </th>
         <th>
-            @Html.ActionLink("Tytuł", "Index", new { sortOrder = ViewBag.NameSortParam})
+            @Html.ActionLink("Tytuł", "Index", new { sortOrder = ViewBag.NameSortParam, currentFilter = ViewBag.CurrentFilter})
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Category.Name)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Category.Name) <!--FirstOrDefault needed for proper working with DisplayNameFor with pagedList-->    
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Authors)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Authors)
         </th>
         <th>
-            @Html.ActionLink("Cena", "Index", new { sortOrder = ViewBag.PriceSortParam})
+            @Html.ActionLink("Cena", "Index", new { sortOrder = ViewBag.PriceSortParam, currentFilter = ViewBag.CurrentFilter})
         </th>
     </tr>
 
@@ -39,7 +41,7 @@
     {
         <tr>
             <td>
-                <img src="@Url.Content("~/Content/Images/"+item.ImagePath)" alt="" class="img-thumbnail" />
+                <img src="@Url.Content("~/Content/Images/"+item.ImagePath)" alt="Okładka książki + @item.Title" class="img-thumbnail" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
@@ -62,3 +64,7 @@
     }
 
 </table>
+<br />
+Strona @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))

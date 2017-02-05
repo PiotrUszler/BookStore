@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using BookStoreWithAuthentication.DAL;
 using BookStoreWithAuthentication.Models;
+using PagedList;
 
 namespace BookStoreWithAuthentication.Controllers
 {
@@ -16,10 +17,21 @@ namespace BookStoreWithAuthentication.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Book
-        public ActionResult Index(string sortOrder, string search)
+        public ActionResult Index(string sortOrder, string currentFilter, string search, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParam = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewBag.PriceSortParam = sortOrder == "price" ? "price_desc" : "price";
+
+            if(search != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                search = currentFilter;
+            }
+            ViewBag.CurrentFilter = search;
 
             var books = db.Books.Include(b => b.Category).Include(b => b.Publisher).Include(b => b.Series);
 
@@ -47,7 +59,9 @@ namespace BookStoreWithAuthentication.Controllers
                     books = books.OrderBy(b => b.Title);
                     break;
             }
-            return View(books.ToList());
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(books.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Book/Details/5
