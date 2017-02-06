@@ -35,27 +35,32 @@ namespace BookStoreWithAuthentication.Controllers
         [HttpPost]
         public ActionResult CreateBook([Bind(Include = "Title, NumOfPages, Price, CategoryID, PublisherID, SeriesID")] Book book, string author)
         {
-            //Need to figure out how to add multiple authors
-            Author auth = db.Authors.SingleOrDefault(a => (a.FirstName + " " + a.LastName) == author);
-            List<Author> authors = new List<Author>();
-            authors.Add(auth);
-            book.Authors = authors;
-
-            if(Request.Files.Count > 0)
-            {
-                var file = Request.Files[0];
-
-                if(file != null && file.ContentLength > 0)
-                {
-                    var fileName = Path.GetFileName(file.FileName);
-                    var path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
-                    file.SaveAs(path);
-                    book.ImagePath = fileName;
-                }
-            }
-
             if (ModelState.IsValid)
             {
+                //Adding authors by splitting string
+                string[] auths = author.Split(',');
+                List<Author> authors = new List<Author>();
+                foreach (var item in auths)
+                {
+                    Author auth = db.Authors.SingleOrDefault(a => (a.FirstName + " " + a.LastName) == item);
+                    authors.Add(auth);
+                }
+                book.Authors = authors;
+
+                //File upload, add some sort of waiting to complete uploading
+                if (Request.Files.Count > 0)
+                {
+                    var file = Request.Files[0];
+
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        var fileName = Path.GetFileName(file.FileName);
+                        var path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
+                        file.SaveAs(path);
+                        book.ImagePath = fileName;
+                    }
+                }
+
                 db.Books.Add(book);
                 db.SaveChanges();
                 return RedirectToAction("Index");
