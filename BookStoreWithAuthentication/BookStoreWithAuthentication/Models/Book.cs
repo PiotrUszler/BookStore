@@ -28,6 +28,11 @@ namespace BookStoreWithAuthentication.Models
         [Display(Name = "Autor")]
         public virtual ICollection<Author> Authors { get; set; }
 
+        public string AuthorsToString()
+        {
+            return String.Join(",", Authors);
+        }
+
         public Book()
         {
             this.ImagePath = "no_cover.png";
