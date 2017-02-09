@@ -8,13 +8,15 @@ namespace BookStoreWithAuthentication.Models
 {
     public class Book
     {
+        
         public int ID { get; set; }
-        [Display(Name = "Tytuł")]
+        [Display(Name = "Tytuł"), Required]
         public string Title { get; set; }
         [Display(Name = "Ilość stron")]
         public int NumOfPages { get; set; }
-        [Display(Name = "Cena")]
+        [Display(Name = "Cena"), Required]
         public decimal Price { get; set; }
+        [Display(Name = "Ścieżka okładki")]
         public string ImagePath { get; set; }
         [Display(Name = "Kategoria")]
         public int CategoryID { get; set; }

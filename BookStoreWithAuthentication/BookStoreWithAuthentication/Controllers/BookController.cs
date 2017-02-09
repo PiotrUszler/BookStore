@@ -9,21 +9,25 @@ using System.Web.Mvc;
 using BookStoreWithAuthentication.DAL;
 using BookStoreWithAuthentication.Models;
 using PagedList;
+using System.Data.Entity.Infrastructure;
+using System.IO;
 
 namespace BookStoreWithAuthentication.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class BookController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Book
+        [AllowAnonymous]
         public ActionResult Index(string sortOrder, string currentFilter, string search, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParam = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
             ViewBag.PriceSortParam = sortOrder == "price" ? "price_desc" : "price";
 
-            if(search != null)
+            if (search != null)
             {
                 page = 1;
             }
@@ -38,8 +42,8 @@ namespace BookStoreWithAuthentication.Controllers
             if (!String.IsNullOrEmpty(search))
             {
                 books = books.Where(
-                    s => s.Title.Contains(search) || 
-                    s.Category.Name.Contains(search) || 
+                    s => s.Title.Contains(search) ||
+                    s.Category.Name.Contains(search) ||
                     s.Authors.Any(a => a.FirstName.Contains(search) || a.LastName.Contains(search))
                     );
             }
@@ -79,94 +83,173 @@ namespace BookStoreWithAuthentication.Controllers
             return View(book);
         }
 
-        // GET: Book/Create
+        #region createBook
+        //GET: /Book/Create
         public ActionResult Create()
         {
             ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name");
             ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name");
             ViewBag.SeriesID = new SelectList(db.Series, "ID", "Name");
+
             return View();
         }
 
-        // POST: Book/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //POST: /Book/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Title,NumOfPages,ImagePath,CategoryID,PublisherID,SeriesID")] Book book)
+        public ActionResult Create([Bind(Include = "Title, NumOfPages, Price, CategoryID, PublisherID, SeriesID")] Book book, string author)
         {
             if (ModelState.IsValid)
             {
+                //Adding authors by splitting string
+                string[] auths = author.Split(',');
+                List<Author> authors = new List<Author>();
+                foreach (var item in auths)
+                {
+                    Author auth = db.Authors.SingleOrDefault(a => (a.FirstName + " " + a.LastName) == item);
+                    authors.Add(auth);
+                }
+                book.Authors = authors;
+
+                //File upload, add some sort of waiting to complete uploading
+                if (Request.Files.Count > 0)
+                {
+                    var file = Request.Files[0];
+
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        var fileName = Path.GetFileName(file.FileName);
+                        var path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
+                        file.SaveAs(path);
+                        book.ImagePath = fileName;
+                    }
+                }
+
                 db.Books.Add(book);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", book.CategoryID);
             ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
             ViewBag.SeriesID = new SelectList(db.Series, "ID", "Name", book.SeriesID);
+
             return View(book);
         }
 
-        // GET: Book/Edit/5
+        #endregion
+
+        #region EditBook
+
+        //GET: /Book/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             Book book = db.Books.Find(id);
+
             if (book == null)
-            {
                 return HttpNotFound();
-            }
+
             ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", book.CategoryID);
-            ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
             ViewBag.SeriesID = new SelectList(db.Series, "ID", "Name", book.SeriesID);
+            ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
+            ViewBag.Authors = book.AuthorsToString();
+
             return View(book);
         }
 
-        // POST: Book/Edit/5
+        //POST: /Book/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Title,NumOfPages,ImagePath,CategoryID,PublisherID,SeriesID")] Book book)
+        public ActionResult Edit(int? id, string author)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(book).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", book.CategoryID);
-            ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", book.PublisherID);
-            ViewBag.SeriesID = new SelectList(db.Series, "ID", "Name", book.SeriesID);
-            return View(book);
-        }
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-        // GET: Book/Delete/5
+            var bookToUpdate = db.Books.Include(b => b.Authors).Where(i => i.ID == id).Single();
+            if (TryUpdateModel(bookToUpdate, "", new string[] { "Title", "NumOfPages", "Price", "CategoryID", "SeriesID", "PublisherID" }))
+            {
+                try
+                {
+
+                    UpdateBookAuthors(author, bookToUpdate);
+                    UpdateBookCover(bookToUpdate, this.Request);
+
+
+                    db.Entry(bookToUpdate).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (RetryLimitExceededException e)
+                {
+                    ModelState.AddModelError("", e);
+                }
+            }
+            ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name", bookToUpdate.CategoryID);
+            ViewBag.SeriesID = new SelectList(db.Series, "ID", "Name", bookToUpdate.SeriesID);
+            ViewBag.PublisherID = new SelectList(db.Publishers, "ID", "Name", bookToUpdate.PublisherID);
+            ViewBag.Authors = bookToUpdate.AuthorsToString();
+
+            return View(bookToUpdate);
+
+        }
+        #endregion
+
+        //GET: /BookStoreManager/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             Book book = db.Books.Find(id);
+
             if (book == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(book);
         }
 
-        // POST: Book/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        //POST: /BookStoreManager/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id)
         {
             Book book = db.Books.Find(id);
             db.Books.Remove(book);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        private void UpdateBookAuthors(string author, Book bookToUpdate)
+        {
+            List<Author> authors = new List<Author>();
+            if (author != null)
+            {
+                string[] auths = author.Split(',');
+                foreach (var item in auths)
+                {
+                    Author auth = db.Authors.SingleOrDefault(a => (a.FirstName + " " + a.LastName) == item);
+                    authors.Add(auth);
+                }
+            }
+            bookToUpdate.Authors = authors;
+        }
+
+        private void UpdateBookCover(Book bookToUpdate, HttpRequestBase request)
+        {
+            if (Request.Files.Count > 0)
+            {
+                var file = Request.Files[0];
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    var path = Path.Combine(Server.MapPath("~/Content/Images/"), fileName);
+                    file.SaveAs(path);
+                    bookToUpdate.ImagePath = fileName;
+                }
+            }
+
+
         }
 
         protected override void Dispose(bool disposing)
