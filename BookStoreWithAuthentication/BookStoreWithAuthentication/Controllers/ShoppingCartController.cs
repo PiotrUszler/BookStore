@@ -63,5 +63,14 @@ namespace BookStoreWithAuthentication.Controllers
             ViewData["CartCount"] = cart.GetCount();
             return PartialView("CartSummary");
         }
+
+
+        public ActionResult GetTotal()
+        {
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+
+            decimal total = cart.GetTotal();
+            return Json(new { total = total}, JsonRequestBehavior.AllowGet);
+        }
     }
 }

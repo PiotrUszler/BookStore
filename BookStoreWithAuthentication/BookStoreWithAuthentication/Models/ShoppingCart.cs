@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace BookStoreWithAuthentication.Models
 {
-    public partial class ShoppingCart
+    public class ShoppingCart
     {
         DAL.ApplicationDbContext db = new DAL.ApplicationDbContext();
 

@@ -27,3 +27,8 @@ textarea {
     width: 80px;
     height: 100px;
 }
+
+.navbar-text{
+    margin-left: 0px!important;
+    color: #999;
+}
