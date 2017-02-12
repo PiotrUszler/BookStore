@@ -132,8 +132,21 @@ namespace BookStoreWithAuthentication.DAL
                 Phone = "123456789",
                 Email = "kowalski@poczta.pl",
                 Total = 25,
-                OrderDate = new DateTime(2017, 1, 20)
-                }   
+                OrderDate = new DateTime(2017, 2, 2)
+                },
+                new Order {
+                OrderId = 3,
+                Username = "nowak@poczta.pl",
+                FirstName = "Mirek",
+                LastName = "Nowak",
+                Address = "jeziorna 3/3",
+                City = "Olsztyn",
+                PostalCode = "10-987",
+                Phone = "123456789",
+                Email = "nowak@poczta.pl",
+                Total = 30,
+                OrderDate = new DateTime(2017, 2, 2)
+                }
             };
             orders.ForEach(o => context.Orders.Add(o));
             context.SaveChanges();
@@ -160,6 +173,13 @@ namespace BookStoreWithAuthentication.DAL
                     BookId = 8,
                     Quantity = 1,
                     UnitPrice = 25.00M
+                },
+                new OrderDetail
+                {
+                    OrderId = 3,
+                    BookId = 11,
+                    Quantity = 2,
+                    UnitPrice = 30.00M
                 }
             };
             ordersDetails.ForEach(o => context.OrderDetails.Add(o));

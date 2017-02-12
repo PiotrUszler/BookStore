@@ -7,6 +7,34 @@ using System.Web.Mvc;
 
 namespace BookStoreWithAuthentication.Models
 {
+    public enum OrderStatus
+    {
+        IN_PROGRESS,
+        READY_TO_SEND,
+        SENT,
+        CANCELED
+    }
+
+    public static class OrderStatusHelper
+    {
+        public static string GetName(this OrderStatus status)
+        {
+            switch (status)
+            {
+                case OrderStatus.IN_PROGRESS:
+                    return "W realizacji";
+                case OrderStatus.READY_TO_SEND:
+                    return "Gotowe do wysłania";
+                case OrderStatus.SENT:
+                    return "Wysłano";
+                case OrderStatus.CANCELED:
+                    return "Anulowano";
+                default:
+                    return String.Empty;
+            }
+        }
+    }
+
     [Bind(Exclude = "OrderId")]
     public partial class Order
     {
@@ -55,6 +83,14 @@ namespace BookStoreWithAuthentication.Models
         [ScaffoldColumn(false)]
         public System.DateTime OrderDate { get; set; }
 
+        public OrderStatus Status { get; set; }
+
         public List<OrderDetail> OrderDetails { get; set; }
+
+        public Order()
+        {
+            this.Status = OrderStatus.IN_PROGRESS;
+        }
+
     }
 }

@@ -4,10 +4,10 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Szczegóły zamówienia</h2>
 
 <div>
-    <h4>Order</h4>
+    <h4>Zamówienie</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -66,19 +66,46 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Total)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Total) zł
+        </dd>
     </dl>
+
 </div>
 <div>
-    @foreach(var detail in ViewBag.details)
-    {
-        <ul>
-            <li>@detail.Book.Title</li>
-            <li>@detail.Quantity</li>
-            <li>@detail.UnitPrice</li>
-        </ul>
-    }
+    <h4>Szczegóły</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        @foreach (var detail in ViewBag.details)
+        {
+            <dt>
+                Tytuł
+            </dt>
+            <dd>
+                @detail.Book.Title
+            </dd>
+
+            <dt>
+                Ilość
+            </dt>
+            <dd>
+                @detail.Quantity
+            </dd>
+
+            <dt>
+                Cena za jednostkę
+            </dt>
+            <dd>
+                @detail.UnitPrice
+            </dd>
+        }
+    </dl>
+    <br />
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
