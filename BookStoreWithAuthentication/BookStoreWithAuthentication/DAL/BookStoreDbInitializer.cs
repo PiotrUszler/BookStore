@@ -107,6 +107,65 @@ namespace BookStoreWithAuthentication.DAL
 
             context.SaveChanges();
 
+            var orders = new List<Order>() {
+            new Order {
+                OrderId = 1,
+                Username = "kowalski@poczta.pl",
+                FirstName = "Jan",
+                LastName = "Kowalski",
+                Address = "dworcowa 32/8",
+                City = "Katowice",
+                PostalCode = "14-923",
+                Phone = "123456789",
+                Email = "kowalski@poczta.pl",
+                Total = 68,
+                OrderDate = new DateTime(2017, 1, 20)
+                },
+            new Order {
+                OrderId = 2,
+                Username = "kowalski@poczta.pl",
+                FirstName = "Jan",
+                LastName = "Kowalski",
+                Address = "mazowiecka 8/2",
+                City = "Gdańsk",
+                PostalCode = "12-123",
+                Phone = "123456789",
+                Email = "kowalski@poczta.pl",
+                Total = 25,
+                OrderDate = new DateTime(2017, 1, 20)
+                }   
+            };
+            orders.ForEach(o => context.Orders.Add(o));
+            context.SaveChanges();
+
+            var ordersDetails = new List<OrderDetail>()
+            {
+                new OrderDetail
+                {
+                    OrderId = 1,
+                    BookId = 6,
+                    Quantity = 1,
+                    UnitPrice = 36.00M
+                },
+                new OrderDetail
+                {
+                    OrderId = 1,
+                    BookId = 2,
+                    Quantity = 1,
+                    UnitPrice = 32.00M
+                },
+                new OrderDetail
+                {
+                    OrderId = 2,
+                    BookId = 8,
+                    Quantity = 1,
+                    UnitPrice = 25.00M
+                }
+            };
+            ordersDetails.ForEach(o => context.OrderDetails.Add(o));
+            context.SaveChanges();
+            
+
         }
         void AddOrUpdateAuthors(ApplicationDbContext context, string bookTitle, string authorLastName)
         {
@@ -117,5 +176,7 @@ namespace BookStoreWithAuthentication.DAL
                 book.Authors.Add(context.Authors.Single(a => a.LastName == authorLastName));
             }
         }
+
+   
     }
 }

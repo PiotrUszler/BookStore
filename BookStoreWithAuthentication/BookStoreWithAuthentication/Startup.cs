@@ -41,6 +41,39 @@ namespace BookStoreWithAuthentication
                     var result = userManager.AddToRole(user.Id, "Admin");
                 }
             }
+
+            if (!roleManager.RoleExists("User"))
+            {
+                var role = new IdentityRole();
+                role.Name = "User";
+                roleManager.Create(role);
+
+                string userPass = "Haslo123";
+
+                var user = new ApplicationUser();
+                user.UserName = "kowalski@poczta.pl";
+                user.Email = "kowalski@poczta.pl";
+                user.FirstName = "Jan";
+                user.LastName = "Kowalski";
+
+                var chkUser = userManager.Create(user, userPass);
+                if (chkUser.Succeeded)
+                {
+                    var result = userManager.AddToRole(user.Id, "User");
+                }
+
+                var user2 = new ApplicationUser();
+                user2.UserName = "nowak@poczta.pl";
+                user2.Email = "nowak@poczta.pl";
+                user2.FirstName = "Mirek";
+                user2.LastName = "Nowak";
+
+                chkUser = userManager.Create(user2, userPass);
+                if (chkUser.Succeeded)
+                {
+                    var result = userManager.AddToRole(user2.Id, "User");
+                }
+            }
         }
     }
 }

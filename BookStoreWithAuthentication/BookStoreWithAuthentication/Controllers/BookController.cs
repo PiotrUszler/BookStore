@@ -68,6 +68,7 @@ namespace BookStoreWithAuthentication.Controllers
             return View(books.ToPagedList(pageNumber, pageSize));
         }
 
+        [AllowAnonymous]
         // GET: Book/Details/5
         public ActionResult Details(int? id)
         {
