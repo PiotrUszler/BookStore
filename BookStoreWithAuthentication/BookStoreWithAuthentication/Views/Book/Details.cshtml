@@ -50,20 +50,12 @@
             @Html.DisplayFor(model => model.NumOfPages)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
-
     </dl>
     <p class="button">
         @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.ID}, "")
     </p>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @if(HttpContext.Current.User.IsInRole("Admin")){ Html.ActionLink("Edit", "Edit", new { id = Model.ID }); } 
     @Html.ActionLink("Back to List", "Index")
 </p>

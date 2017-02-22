@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BookStoreWithAuthentication.Models;
+using System.Collections.Generic;
+using BookStoreWithAuthentication.DAL;
 
 namespace BookStoreWithAuthentication.Controllers
 {
@@ -16,8 +18,17 @@ namespace BookStoreWithAuthentication.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         public ManageController()
         {
+        }
+
+        [HttpGet]
+        public ActionResult ShowUserOrders()
+        {
+            List<Order> orders = db.Orders.Where(o => o.Username == this.User.Identity.Name).ToList();
+            return View(orders);
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)

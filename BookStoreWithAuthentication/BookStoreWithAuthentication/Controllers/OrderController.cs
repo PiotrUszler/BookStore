@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using BookStoreWithAuthentication.DAL;
 using BookStoreWithAuthentication.Models;
+using System.Data.Entity.Infrastructure;
 
 namespace BookStoreWithAuthentication.Controllers
 {
@@ -22,6 +23,7 @@ namespace BookStoreWithAuthentication.Controllers
         }
 
         // GET: Order/Details/5
+        [HttpGet]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -35,6 +37,7 @@ namespace BookStoreWithAuthentication.Controllers
             }
             List<OrderDetail> details = db.OrderDetails.Where(o => o.OrderId == id).ToList();
             ViewBag.details = details;
+            ViewBag.orderStatus = order.Status.GetName();
             return View(order);
         }
 
@@ -60,6 +63,7 @@ namespace BookStoreWithAuthentication.Controllers
         }
 
         // GET: Order/Edit/5
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -75,17 +79,31 @@ namespace BookStoreWithAuthentication.Controllers
         }
 
         // POST: Order/Edit/5
-        [HttpPost]
+
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Order order)
+        [HttpPost, ActionName("Details")]
+        public ActionResult UpdateOrderStatus(int? id)
         {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var orderToUpdate = db.Orders.Find(id);
+            if(TryUpdateModel(orderToUpdate, "", new string[] { "Status"}))
             if (ModelState.IsValid)
             {
-                db.Entry(order).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    try
+                    {
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch(RetryLimitExceededException ex)
+                    {
+                        ModelState.AddModelError("", "Nie udało się zapisać zmian.");
+                    }
+
             }
-            return View(order);
+            return View(orderToUpdate);
         }
 
         // GET: Order/Delete/5
@@ -113,6 +131,7 @@ namespace BookStoreWithAuthentication.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
 
         protected override void Dispose(bool disposing)
         {

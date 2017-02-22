@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -9,9 +10,13 @@ namespace BookStoreWithAuthentication.Models
 {
     public enum OrderStatus
     {
+        [Display(Name = "W realizacji")]
         IN_PROGRESS,
+        [Display(Name = "Gotowe do wysłania")]
         READY_TO_SEND,
+        [Display(Name = "Wysłane")]
         SENT,
+        [Display(Name = "Anulowano")]
         CANCELED
     }
 
@@ -32,6 +37,18 @@ namespace BookStoreWithAuthentication.Models
                 default:
                     return String.Empty;
             }
+        }
+
+        public static List<OrderStatus> OrderStatusToList(this OrderStatus status)
+        {
+            List<OrderStatus> orderStatusList = new List<OrderStatus>()
+            {
+                OrderStatus.CANCELED,
+                OrderStatus.IN_PROGRESS,
+                OrderStatus.READY_TO_SEND,
+                OrderStatus.SENT
+            };
+            return orderStatusList;
         }
     }
 
@@ -77,7 +94,7 @@ namespace BookStoreWithAuthentication.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [ScaffoldColumn(false)]
+        [Display(Name = "Kwota całkowita")]
         public decimal Total { get; set; }
 
         [ScaffoldColumn(false)]
