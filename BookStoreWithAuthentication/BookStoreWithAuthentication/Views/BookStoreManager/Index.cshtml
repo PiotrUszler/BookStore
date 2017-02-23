@@ -7,11 +7,11 @@
 
 <div class="panel">
     <div class="panel-body">
-        <button class="btn">Dodaj książkę</button>
-        <button class="btn">Dodaj autora</button>
-        <button class="btn">Dodaj wydawce</button>
-        <button class="btn">Dodaj serie</button>
-        <button class="btn">Zamówienia</button>
+        @Html.ActionLink("Dodaj książkę", "Create", "Book", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Dodaj autora", "Create", "Author", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Dodaj wydawce", "Create", "Publisher", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Dodaj serie", "Create", "Series", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Zamówienia", "Index", "Order", null, new { @class = "btn btn-default" })
     </div>
 </div>
 

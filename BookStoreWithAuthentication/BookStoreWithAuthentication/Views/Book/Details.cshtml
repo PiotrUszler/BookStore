@@ -5,6 +5,158 @@
 }
 
 <h2>Details</h2>
+<script>
+    $(document).ready(function () {
+        $.post("/Book/GetRating", {"id": @Model.ID}, function(data){
+            var i = 1;
+            for(i; i <= data.rating; i++){
+                $('#star-'+i).addClass("rating-star-full")
+            }
+            if(data.rating % 1 > 0.45){
+                $('#star-'+(i)).addClass("rating-star-half")
+            }
+        })
+    })
+</script>
+
+@if  (ViewBag.UserVoted == null || !ViewBag.UserVoted)
+{
+    <script>
+        $(document).ready(function(){
+        $('#star-vote-1').click(function(){
+            $.post("/Book/RateBook", { "id": @Model.ID, "vote": 1}, function(){
+                $('#star-vote-1').addClass("rating-star-full");
+                $('#star-vote-1').unbind();
+                $('#star-vote-2').unbind();
+                $('#star-vote-3').unbind();
+                $('#star-vote-4').unbind();
+                $('#star-vote-5').unbind();
+                $('#voted').text("Dziękujemy za głos.")
+            })
+        });
+        $('#star-vote-2').click(function(){
+            $.post("/Book/RateBook", { "id": @Model.ID, "vote": 2}, function(){
+                $('#star-vote-1').addClass("rating-star-full");
+                $('#star-vote-2').addClass("rating-star-full");
+                $('#star-vote-1').unbind();
+                $('#star-vote-2').unbind();
+                $('#star-vote-3').unbind();
+                $('#star-vote-4').unbind();
+                $('#star-vote-5').unbind();
+                $('#voted').text("Dziękujemy za głos.")
+            })
+        });
+        $('#star-vote-3').click(function(){
+            $.post("/Book/RateBook", { "id": @Model.ID, "vote": 3}, function(){
+                $('#star-vote-1').addClass("rating-star-full");
+                $('#star-vote-2').addClass("rating-star-full");
+                $('#star-vote-3').addClass("rating-star-full");
+                $('#star-vote-1').unbind();
+                $('#star-vote-2').unbind();
+                $('#star-vote-3').unbind();
+                $('#star-vote-4').unbind();
+                $('#star-vote-5').unbind();
+                $('#voted').text("Dziękujemy za głos.")
+            })
+        });
+        $('#star-vote-4').click(function(){
+            $.post("/Book/RateBook", { "id": @Model.ID, "vote": 4}, function(){
+                $('#star-vote-1').addClass("rating-star-full");
+                $('#star-vote-2').addClass("rating-star-full");
+                $('#star-vote-3').addClass("rating-star-full");
+                $('#star-vote-4').addClass("rating-star-full");
+                $('#star-vote-1').unbind();
+                $('#star-vote-2').unbind();
+                $('#star-vote-3').unbind();
+                $('#star-vote-4').unbind();
+                $('#star-vote-5').unbind();
+                $('#voted').text("Dziękujemy za głos.")
+            })
+        });
+        $('#star-vote-5').click(function(){
+            $.post("/Book/RateBook", { "id": @Model.ID, "vote": 5}, function(){
+                $('#star-vote-1').addClass("rating-star-full");
+                $('#star-vote-2').addClass("rating-star-full");
+                $('#star-vote-3').addClass("rating-star-full");
+                $('#star-vote-4').addClass("rating-star-full");
+                $('#star-vote-5').addClass("rating-star-full");
+                $('#star-vote-1').unbind();
+                $('#star-vote-2').unbind();
+                $('#star-vote-3').unbind();
+                $('#star-vote-4').unbind();
+                $('#star-vote-5').unbind();
+                $('#voted').text("Dziękujemy za głos.")
+            })
+        });
+            $('#star-vote-1').mouseover(function(){
+                $('#star-vote-1').addClass("rating-star-full")
+            });
+            $('#star-vote-2').mouseover(function(){
+                $('#star-vote-1').addClass("rating-star-full");
+                $('#star-vote-2').addClass("rating-star-full");
+            });
+            $('#star-vote-3').mouseover(function(){
+                $('#star-vote-1').addClass("rating-star-full");
+                $('#star-vote-2').addClass("rating-star-full");
+                $('#star-vote-3').addClass("rating-star-full");
+            });
+            $('#star-vote-4').mouseover(function(){
+                $('#star-vote-1').addClass("rating-star-full");
+                $('#star-vote-2').addClass("rating-star-full");
+                $('#star-vote-3').addClass("rating-star-full");
+                $('#star-vote-4').addClass("rating-star-full");
+            });
+            $('#star-vote-5').mouseover(function(){
+                $('#star-vote-1').addClass("rating-star-full");
+                $('#star-vote-2').addClass("rating-star-full");
+                $('#star-vote-3').addClass("rating-star-full");
+                $('#star-vote-4').addClass("rating-star-full");
+                $('#star-vote-5').addClass("rating-star-full");
+            });
+
+            $('#star-vote-1').mouseleave(function(){
+                $('#star-vote-1').removeClass("rating-star-full")
+            });
+            $('#star-vote-2').mouseleave(function(){
+                $('#star-vote-1').removeClass("rating-star-full")
+                $('#star-vote-2').removeClass("rating-star-full")
+            });
+            $('#star-vote-3').mouseleave(function(){
+                $('#star-vote-1').removeClass("rating-star-full")
+                $('#star-vote-2').removeClass("rating-star-full")
+                $('#star-vote-3').removeClass("rating-star-full")
+            });
+            $('#star-vote-4').mouseleave(function(){
+                $('#star-vote-1').removeClass("rating-star-full")
+                $('#star-vote-2').removeClass("rating-star-full")
+                $('#star-vote-3').removeClass("rating-star-full")
+                $('#star-vote-4').removeClass("rating-star-full")
+            });
+            $('#star-vote-5').mouseleave(function(){
+                $('#star-vote-1').removeClass("rating-star-full")
+                $('#star-vote-2').removeClass("rating-star-full")
+                $('#star-vote-3').removeClass("rating-star-full")
+                $('#star-vote-4').removeClass("rating-star-full")
+                $('#star-vote-5').removeClass("rating-star-full")
+            });
+        })
+    </script>
+}
+else
+{
+    <script>
+        $(document).ready(function(){
+            $.post("/Book/GetUserRating", {"id": @Model.ID}, function(data){
+                for(var i = 1; i <= data.rating; i++){
+                    $('#star-vote-'+i).addClass('rating-star-full')
+                    console.log(data.rating)
+                }
+            })
+        })
+    </script>
+}
+
+
 
 <div>
     <h4>Book</h4>
@@ -49,8 +201,30 @@
         <dd>
             @Html.DisplayFor(model => model.NumOfPages)
         </dd>
-
+      
     </dl>
+    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+    {
+        <p>Oceń książkę:</p>
+        <div class="rating-star-block">
+            <a id="star-vote-1" class="star rating-star-empty" href="#" title="ocena 1"> ocena 1</a>
+            <a id="star-vote-2" class="star rating-star-empty" href="#" title="ocena 2"> ocena 2</a>
+            <a id="star-vote-3" class="star rating-star-empty" href="#" title="ocena 3"> ocena 3</a>
+            <a id="star-vote-4" class="star rating-star-empty" href="#" title="ocena 4"> ocena 4</a>
+            <a id="star-vote-5" class="star rating-star-empty" href="#" title="ocena 5"> ocena 5</a>
+        </div>
+        <p id="voted"></p>
+        <br />
+    }
+
+    <div class="rating-star-block">
+        <a id="star-1" class="star rating-star-empty" href="#" title="ocena 1"> ocena 1</a>
+        <a id="star-2" class="star rating-star-empty" href="#" title="ocena 2"> ocena 2</a>
+        <a id="star-3" class="star rating-star-empty" href="#" title="ocena 3"> ocena 3</a>
+        <a id="star-4" class="star rating-star-empty" href="#" title="ocena 4"> ocena 4</a>
+        <a id="star-5" class="star rating-star-empty" href="#" title="ocena 5"> ocena 5</a>
+        <p>Średnia ocen użytkowników to: @String.Format("{0:0.00}", ViewBag.Rating)</p>
+    </div>
     <p class="button">
         @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.ID}, "")
     </p>

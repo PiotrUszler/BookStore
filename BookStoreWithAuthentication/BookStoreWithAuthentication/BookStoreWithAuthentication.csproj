@@ -199,6 +199,7 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\Publisher.cs" />
+    <Compile Include="Models\Rating.cs" />
     <Compile Include="Models\Series.cs" />
     <Compile Include="Models\ShoppingCart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -211,6 +212,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\Images\half-star.png" />
+    <Content Include="Content\Images\full-star.png" />
+    <Content Include="Content\Images\empty-star.png" />
     <Content Include="Content\Images\Holmes-Studium_w_szkarlacie.jpg" />
     <Content Include="Content\Images\Holmes-Znak_czterech.jpg" />
     <Content Include="Content\Images\no_cover.png" />

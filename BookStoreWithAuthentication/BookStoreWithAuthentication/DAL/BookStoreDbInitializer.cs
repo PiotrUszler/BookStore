@@ -78,7 +78,13 @@ namespace BookStoreWithAuthentication.DAL
             books.ForEach(b => context.Books.Add(b));
             context.SaveChanges();
 
-
+            var ratings = new List<Rating>
+            {
+                new Rating {Rate = 4, User = "kowalski@poczta.pl", book = context.Books.Find(3) },
+                new Rating {Rate = 3, User = "nowak@poczta.pl", book = context.Books.Find(3) }
+            };
+            ratings.ForEach(r => context.Ratings.Add(r));
+            context.SaveChanges();
 
             var authors = new List<Author>
             {

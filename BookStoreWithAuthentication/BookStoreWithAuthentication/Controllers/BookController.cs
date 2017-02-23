@@ -14,7 +14,7 @@ using System.IO;
 
 namespace BookStoreWithAuthentication.Controllers
 {
-    [Authorize(Roles = "Admin")]
+
     public class BookController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -76,16 +76,72 @@ namespace BookStoreWithAuthentication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Book book = db.Books.Find(id);
+
             if (book == null)
             {
                 return HttpNotFound();
             }
+            double rating;
+            try
+            {
+                rating = book.Ratings.Average(r => r.Rate);
+            }
+            catch(InvalidOperationException ex)
+            {
+                rating = 0;
+            }
+            ViewBag.Rating = rating;
+            book.Ratings.FirstOrDefault(r => r.User == this.HttpContext.User.Identity.Name ? ViewBag.UserVoted = true : ViewBag.UserVoted = false);
+
             return View(book);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult GetRating(int? id)
+        {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Book book = db.Books.Find(id);
+            double rating;
+            try
+            {
+                rating = book.Ratings.Average(r => r.Rate);
+            }
+            catch (InvalidOperationException ex)
+            {
+                rating = 0;
+            }
+
+            return Json(new { rating = rating });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "User, Admin")]
+        public ActionResult GetUserRating(int id)
+        {
+            Book book = db.Books.Find(id);
+            Rating userRating = book.Ratings.FirstOrDefault(r => r.User == this.HttpContext.User.Identity.Name);
+            return Json(new { rating = userRating.Rate });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "User, Admin")]
+        public ActionResult RateBook(int id, int vote)
+        {
+            Book book = db.Books.Find(id);
+            book.Ratings.Add(new Rating(){ book = book, Rate = vote, User = this.HttpContext.User.Identity.Name });
+            db.SaveChanges();
+            return Json("");
         }
 
         #region createBook
         //GET: /Book/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.CategoryID = new SelectList(db.Categories, "ID", "Name");
@@ -97,6 +153,7 @@ namespace BookStoreWithAuthentication.Controllers
 
         //POST: /Book/Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult Create([Bind(Include = "Title, NumOfPages, Price, CategoryID, PublisherID, SeriesID")] Book book, string author)
         {
             if (ModelState.IsValid)
@@ -141,6 +198,7 @@ namespace BookStoreWithAuthentication.Controllers
         #region EditBook
 
         //GET: /Book/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -161,6 +219,7 @@ namespace BookStoreWithAuthentication.Controllers
 
         //POST: /Book/Edit/5
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id, string author)
         {
             if (id == null)
@@ -197,6 +256,7 @@ namespace BookStoreWithAuthentication.Controllers
         #endregion
 
         //GET: /BookStoreManager/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -212,6 +272,7 @@ namespace BookStoreWithAuthentication.Controllers
 
         //POST: /BookStoreManager/Delete/5
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
             Book book = db.Books.Find(id);

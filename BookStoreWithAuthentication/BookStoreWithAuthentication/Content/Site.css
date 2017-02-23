@@ -32,3 +32,27 @@ textarea {
     margin-left: 0px!important;
     color: #999;
 }
+
+.rating-star-empty{
+    background: url("Images/empty-star.png") no-repeat;
+    background-size: 24px 24px !important;
+}
+
+.rating-star-full{
+    background: url("Images//full-star.png") no-repeat !important;
+    background-size: 24px 24px !important;
+}
+
+.rating-star-half{
+    background: url("Images//half-star.png") no-repeat !important;
+    background-size: 24px 24px !important;
+}
+
+.rating-star-block .star {
+            color:rgba(0,0,0,0);
+            display : inline-block;
+            height:24px;
+            overflow:hidden;
+            text-indent:-999em;
+            width:24px;
+}

@@ -29,6 +29,8 @@ namespace BookStoreWithAuthentication.Models
         public virtual Series Series { get; set; }
         [Display(Name = "Autor")]
         public virtual ICollection<Author> Authors { get; set; }
+        [Display(Name = "Ocena")]
+        public virtual ICollection<Rating> Ratings { get; set; }
 
         public string AuthorsToString()
         {
