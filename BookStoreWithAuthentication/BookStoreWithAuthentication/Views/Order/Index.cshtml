@@ -1,14 +1,12 @@
 ﻿@model IEnumerable<BookStoreWithAuthentication.Models.Order>
 @using BookStoreWithAuthentication.Models;
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Zamówienia";
 }
 
-<h2>Index</h2>
+<h2>Zamówienia</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 <table class="table">
     <tr>
         <th>
@@ -64,9 +62,9 @@
             @item.Status.GetName()
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.OrderId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.OrderId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.OrderId })
+            @Html.ActionLink("Edycja", "Edit", new { id=item.OrderId }) |
+            @Html.ActionLink("Szczegóły", "Details", new { id=item.OrderId }) |
+            @Html.ActionLink("Usuń", "Delete", new { id=item.OrderId })
         </td>
     </tr>
 }

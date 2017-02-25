@@ -3,14 +3,11 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Książki";
 }
 
-<h2>Index</h2>
+<h2>Strona Główna</h2>
 
-<p>
-    @if(HttpContext.Current.User.IsInRole("Admin")){ @Html.ActionLink("Create New", "Create")}
-</p>
 @using (Html.BeginForm("Index", "Book", FormMethod.Get))
 {
     <p>
@@ -56,9 +53,9 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @if (HttpContext.Current.User.IsInRole("Admin")) {@Html.ActionLink("Edit", "Edit", new { id = item.ID })} |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @if (HttpContext.Current.User.IsInRole("Admin")) {@Html.ActionLink("Delete", "Delete", new { id = item.ID })}
+                @if (HttpContext.Current.User.IsInRole("Admin")) {@Html.ActionLink("Edytuj", "Edit", new { id = item.ID })} |
+                @Html.ActionLink("Szczegóły", "Details", new { id = item.ID }) |
+                @if (HttpContext.Current.User.IsInRole("Admin")) {@Html.ActionLink("Usuń", "Delete", new { id = item.ID })}
             </td>
         </tr>
     }

@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Admin";
 }
 
 <h2>Panel zarządzania</h2>
@@ -8,9 +8,9 @@
 <div class="panel">
     <div class="panel-body">
         @Html.ActionLink("Dodaj książkę", "Create", "Book", null, new { @class = "btn btn-default" })
-        @Html.ActionLink("Dodaj autora", "Create", "Author", null, new { @class = "btn btn-default" })
-        @Html.ActionLink("Dodaj wydawce", "Create", "Publisher", null, new { @class = "btn btn-default" })
-        @Html.ActionLink("Dodaj serie", "Create", "Series", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Autorzy", "Index", "Author", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Wydawcy", "Index", "Publisher", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Serie", "Index", "Series", null, new { @class = "btn btn-default" })
         @Html.ActionLink("Zamówienia", "Index", "Order", null, new { @class = "btn btn-default" })
     </div>
 </div>

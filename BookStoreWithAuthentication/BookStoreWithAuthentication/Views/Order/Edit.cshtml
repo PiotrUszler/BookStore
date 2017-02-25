@@ -1,10 +1,10 @@
 ﻿@model BookStoreWithAuthentication.Models.Order
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Zamówienia";
 }
 
-<h2>Edit</h2>
+<h2>Edycja</h2>
 
 @using (Html.BeginForm())
 {
@@ -81,12 +81,12 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Zapisz" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Powrót", "Index")
 </div>
