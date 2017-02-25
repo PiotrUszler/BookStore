@@ -86,6 +86,7 @@
             @if (HttpContext.Current.User.IsInRole("Admin"))
             {
                 @Html.EnumDropDownListFor(model => model.Status, "Status", new { @class = "form-control" })
+                <input type="submit" value="Zapisz" class="btn btn-default" />
             }
             else
             {
@@ -94,7 +95,7 @@
         </dd>
 
     </dl>
-    <input type="submit" value="Save" class="btn btn-default" />
+
 </div>
 }
 <div>

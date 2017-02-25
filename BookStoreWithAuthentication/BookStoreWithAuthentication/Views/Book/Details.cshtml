@@ -1,10 +1,10 @@
 ﻿@model BookStoreWithAuthentication.Models.Book
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Szczegóły";
 }
 
-<h2>Details</h2>
+<h2>Szczegóły</h2>
 <script>
     $(document).ready(function () {
         $.post("/Book/GetRating", {"id": @Model.ID}, function(data){
@@ -159,77 +159,92 @@ else
 
 
 <div>
-    <h4>Book</h4>
+    <h4>Książka</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Publisher.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Publisher.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Series.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Series.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.NumOfPages)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.NumOfPages)
-        </dd>
-      
-    </dl>
-    @if (HttpContext.Current.User.Identity.IsAuthenticated)
-    {
-        <p>Oceń książkę:</p>
-        <div class="rating-star-block">
-            <a id="star-vote-1" class="star rating-star-empty" href="#" title="ocena 1"> ocena 1</a>
-            <a id="star-vote-2" class="star rating-star-empty" href="#" title="ocena 2"> ocena 2</a>
-            <a id="star-vote-3" class="star rating-star-empty" href="#" title="ocena 3"> ocena 3</a>
-            <a id="star-vote-4" class="star rating-star-empty" href="#" title="ocena 4"> ocena 4</a>
-            <a id="star-vote-5" class="star rating-star-empty" href="#" title="ocena 5"> ocena 5</a>
+    <div class="row">
+        <div class="col col-md-2">
+            <div>
+                <img src="@Url.Content("~/Content/Images/"+Model.ImagePath)" alt="Okładka książki + @Model.Title" class="" />
+            </div>
         </div>
-        <p id="voted"></p>
-        <br />
-    }
+        <div class="col col-md-10">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Category.Name)
+                </dt>
 
-    <div class="rating-star-block">
-        <a id="star-1" class="star rating-star-empty" href="#" title="ocena 1"> ocena 1</a>
-        <a id="star-2" class="star rating-star-empty" href="#" title="ocena 2"> ocena 2</a>
-        <a id="star-3" class="star rating-star-empty" href="#" title="ocena 3"> ocena 3</a>
-        <a id="star-4" class="star rating-star-empty" href="#" title="ocena 4"> ocena 4</a>
-        <a id="star-5" class="star rating-star-empty" href="#" title="ocena 5"> ocena 5</a>
-        <p>Średnia ocen użytkowników to: @String.Format("{0:0.00}", ViewBag.Rating)</p>
+                <dd>
+                    @Html.DisplayFor(model => model.Category.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Publisher.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Publisher.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Series.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Series.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Title)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Title)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.NumOfPages)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.NumOfPages)
+                </dd>
+            </dl>
+        </div>
+        
     </div>
+   <br />
+    <div class="row">
+        <div class="col col-md-12">
+            <div class="rating-star-block">
+                <a id="star-1" class="star rating-star-empty" href="#" title="ocena 1"> ocena 1</a>
+                <a id="star-2" class="star rating-star-empty" href="#" title="ocena 2"> ocena 2</a>
+                <a id="star-3" class="star rating-star-empty" href="#" title="ocena 3"> ocena 3</a>
+                <a id="star-4" class="star rating-star-empty" href="#" title="ocena 4"> ocena 4</a>
+                <a id="star-5" class="star rating-star-empty" href="#" title="ocena 5"> ocena 5</a>
+                <p>Średnia ocen użytkowników to: @String.Format("{0:0.00}", ViewBag.Rating)</p>
+            </div>
+
+            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                <p>Oceń książkę:</p>
+                <div class="rating-star-block">
+                    <a id="star-vote-1" class="star rating-star-empty" href="#" title="ocena 1"> ocena 1</a>
+                    <a id="star-vote-2" class="star rating-star-empty" href="#" title="ocena 2"> ocena 2</a>
+                    <a id="star-vote-3" class="star rating-star-empty" href="#" title="ocena 3"> ocena 3</a>
+                    <a id="star-vote-4" class="star rating-star-empty" href="#" title="ocena 4"> ocena 4</a>
+                    <a id="star-vote-5" class="star rating-star-empty" href="#" title="ocena 5"> ocena 5</a>
+                </div>
+                <p id="voted"></p>
+                <br />
+            }
+        </div>
+    </div>
+   
     <p class="button">
-        @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.ID}, "")
+        @Html.ActionLink("Dodaj do koszyka", "AddToCart", "ShoppingCart", new { id = Model.ID}, "")
     </p>
 </div>
 <p>
     @if(HttpContext.Current.User.IsInRole("Admin")){ Html.ActionLink("Edit", "Edit", new { id = Model.ID }); } 
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Powrót", "Index")
 </p>

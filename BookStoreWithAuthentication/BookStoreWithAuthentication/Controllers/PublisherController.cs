@@ -8,131 +8,113 @@ using System.Web;
 using System.Web.Mvc;
 using BookStoreWithAuthentication.DAL;
 using BookStoreWithAuthentication.Models;
-using System.Data.Entity.Infrastructure;
 
 namespace BookStoreWithAuthentication.Controllers
 {
-    public class OrderController : Controller
+    public class PublisherController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Order
-        [Authorize(Roles = "Admin")]
+        // GET: Publisher
         public ActionResult Index()
         {
-            return View(db.Orders.ToList());
+            return View(db.Publishers.ToList());
         }
 
-        // GET: Order/Details/5
-        [HttpGet]
+        // GET: Publisher/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
-            if (order == null)
+            Publisher publisher = db.Publishers.Find(id);
+            if (publisher == null)
             {
                 return HttpNotFound();
             }
-            List<OrderDetail> details = db.OrderDetails.Where(o => o.OrderId == id).ToList();
-            ViewBag.details = details;
-            ViewBag.orderStatus = order.Status.GetName();
-            return View(order);
+            return View(publisher);
         }
 
-        // GET: Order/Create
+        // GET: Publisher/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Order/Create
+        // POST: Publisher/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Order order)
+        public ActionResult Create([Bind(Include = "ID,Name")] Publisher publisher)
         {
             if (ModelState.IsValid)
             {
-                db.Orders.Add(order);
+                db.Publishers.Add(publisher);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(order);
+            return View(publisher);
         }
 
-        // GET: Order/Edit/5
-        [HttpGet]
+        // GET: Publisher/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
-            if (order == null)
+            Publisher publisher = db.Publishers.Find(id);
+            if (publisher == null)
             {
                 return HttpNotFound();
             }
-            return View(order);
+            return View(publisher);
         }
 
-        // POST: Order/Edit/5
-
+        // POST: Publisher/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        [HttpPost, ActionName("Details")]
-        public ActionResult UpdateOrderStatus(int? id)
+        public ActionResult Edit([Bind(Include = "ID,Name")] Publisher publisher)
         {
-            if(id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var orderToUpdate = db.Orders.Find(id);
-            if(TryUpdateModel(orderToUpdate, "", new string[] { "Status"}))
             if (ModelState.IsValid)
             {
-                    try
-                    {
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
-                    }
-                    catch(RetryLimitExceededException ex)
-                    {
-                        ModelState.AddModelError("", "Nie udało się zapisać zmian.");
-                    }
-
+                db.Entry(publisher).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return View(orderToUpdate);
+            return View(publisher);
         }
 
-        // GET: Order/Delete/5
+        // GET: Publisher/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
-            if (order == null)
+            Publisher publisher = db.Publishers.Find(id);
+            if (publisher == null)
             {
                 return HttpNotFound();
             }
-            return View(order);
+            return View(publisher);
         }
 
-        // POST: Order/Delete/5
+        // POST: Publisher/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Order order = db.Orders.Find(id);
-            db.Orders.Remove(order);
+            Publisher publisher = db.Publishers.Find(id);
+            db.Publishers.Remove(publisher);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
 
         protected override void Dispose(bool disposing)
         {

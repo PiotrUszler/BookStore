@@ -23,6 +23,7 @@ namespace BookStoreWithAuthentication.DAL
 
             var series = new List<Series>
             {
+                new Series {Name = null, Books = new List<Book>() },
                 new Series {Name = "Harry Potter", Books = new List<Book>() },
                 new Series {Name = "Wiedźmin", Books = new List<Book>() },
                 new Series {Name = "Przygody Tomka Wilmowskiego", Books = new List<Book>()},
