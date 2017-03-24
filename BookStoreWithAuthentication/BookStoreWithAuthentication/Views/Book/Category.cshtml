@@ -6,31 +6,24 @@
     ViewBag.Title = "Książki";
 }
 
-<h2>Strona Główna</h2>
+<h2>Kategoria</h2>
 
-@using (Html.BeginForm("Index", "Book", FormMethod.Get))
-{
-    <p>
-        @Html.TextBox("search", ViewBag.CurrentFilter as string)
-        <input type="submit" value="szukaj" />
-    </p>
-}
 <table class="table">
     <tr>
         <th>
-           
+
         </th>
         <th>
-            @Html.ActionLink("Tytuł", "Index", new { sortOrder = ViewBag.NameSortParam, currentFilter = ViewBag.CurrentFilter})
+            @Html.ActionLink("Tytuł", "Index", new { sortOrder = ViewBag.NameSortParam, ortOrder = ViewBag.NameSortParam })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Category.Name) <!--FirstOrDefault needed for proper working with DisplayNameFor with pagedList-->    
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Category.Name) <!--FirstOrDefault needed for proper working with DisplayNameFor with pagedList-->
         </th>
         <th>
             @Html.DisplayNameFor(model => model.FirstOrDefault().Authors)
         </th>
         <th>
-            @Html.ActionLink("Cena", "Index", new { sortOrder = ViewBag.PriceSortParam, currentFilter = ViewBag.CurrentFilter})
+            @Html.ActionLink("Cena", "Index", new { sortOrder = ViewBag.PriceSortParam, currentFilter = ViewBag.CurrentFilter })
         </th>
     </tr>
 
@@ -53,9 +46,11 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @if (HttpContext.Current.User.IsInRole("Admin")) {@Html.ActionLink("Edytuj", "Edit", new { id = item.ID })} |
+                @if (HttpContext.Current.User.IsInRole("Admin"))
+                {@Html.ActionLink("Edytuj", "Edit", new { id = item.ID })} |
                 @Html.ActionLink("Szczegóły", "Details", new { id = item.ID }) |
-                @if (HttpContext.Current.User.IsInRole("Admin")) {@Html.ActionLink("Usuń", "Delete", new { id = item.ID })}
+                @if (HttpContext.Current.User.IsInRole("Admin"))
+                {@Html.ActionLink("Usuń", "Delete", new { id = item.ID })}
             </td>
         </tr>
     }
@@ -64,4 +59,4 @@
 <br />
 Strona @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, category = ViewBag.Category}))
+@Html.PagedListPager(Model, page => Url.Action("Category", new { page, sortOrder = ViewBag.CurrentSort}))

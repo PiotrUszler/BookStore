@@ -12,11 +12,12 @@ namespace BookStoreWithAuthentication.Controllers
     public class CheckoutController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
+        private UnitOfWork unitOfWork = new UnitOfWork();
 
         //Get: /Checkout/AddressAndPayment
         public ActionResult AddressAndPayment()
         {
-            var user = db.Users.Single(u => u.UserName == User.Identity.Name);
+            var user = db.Users.Single(u => u.UserName == User.Identity.Name);          
             ViewBag.FirstName = user.FirstName;
             ViewBag.LastName = user.LastName;
             ViewBag.Email = user.Email;

@@ -14,11 +14,13 @@ namespace BookStoreWithAuthentication.Controllers
     public class AuthorController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Author
         public ActionResult Index()
         {
-            return View(db.Authors.ToList());
+            //return View(db.Authors.ToList());
+            return View(unitOfWork.AuthorRepository.Get().ToList());
         }
 
         // GET: Author/Details/5
@@ -28,7 +30,8 @@ namespace BookStoreWithAuthentication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Author author = db.Authors.Find(id);
+            //Author author = db.Authors.Find(id);
+            Author author = unitOfWork.AuthorRepository.GetByID(id);
             if (author == null)
             {
                 return HttpNotFound();
@@ -51,8 +54,10 @@ namespace BookStoreWithAuthentication.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Authors.Add(author);
-                db.SaveChanges();
+                //db.Authors.Add(author);
+                //db.SaveChanges();
+                unitOfWork.AuthorRepository.Insert(author);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
@@ -66,7 +71,8 @@ namespace BookStoreWithAuthentication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Author author = db.Authors.Find(id);
+            //Author author = db.Authors.Find(id);
+            Author author = unitOfWork.AuthorRepository.GetByID(id);
             if (author == null)
             {
                 return HttpNotFound();
@@ -75,16 +81,16 @@ namespace BookStoreWithAuthentication.Controllers
         }
 
         // POST: Author/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,FirstName,LastName")] Author author)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(author).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(author).State = EntityState.Modified;
+                //db.SaveChanges();
+                unitOfWork.AuthorRepository.Update(author);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
             }
             return View(author);
@@ -97,7 +103,8 @@ namespace BookStoreWithAuthentication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Author author = db.Authors.Find(id);
+            //Author author = db.Authors.Find(id);
+            Author author = unitOfWork.AuthorRepository.GetByID(id);
             if (author == null)
             {
                 return HttpNotFound();
@@ -110,9 +117,11 @@ namespace BookStoreWithAuthentication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Author author = db.Authors.Find(id);
-            db.Authors.Remove(author);
-            db.SaveChanges();
+            //Author author = db.Authors.Find(id);
+            //db.Authors.Remove(author);
+            //db.SaveChanges();
+            unitOfWork.AuthorRepository.Delete(id);
+            unitOfWork.Save();
             return RedirectToAction("Index");
         }
 

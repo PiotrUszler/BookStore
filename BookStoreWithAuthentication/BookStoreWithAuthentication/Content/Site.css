@@ -56,3 +56,26 @@ textarea {
             text-indent:-999em;
             width:24px;
 }
+
+.book-cover{
+    width: 200px;
+    height: 250px;
+    padding: 2px;
+    border: 2px solid #000000; 
+}
+
+.sidebar-nav{
+    list-style: none;
+}
+
+.sidebar-nav-li{
+
+}
+
+.sidebar-nav li a{
+    text-decoration: none;
+}
+
+#sidebar{
+    background-color: bisque;
+}

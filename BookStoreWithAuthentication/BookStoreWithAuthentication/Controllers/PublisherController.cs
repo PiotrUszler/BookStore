@@ -14,11 +14,11 @@ namespace BookStoreWithAuthentication.Controllers
     public class PublisherController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        private UnitOfWork unitOfWork = new UnitOfWork();
         // GET: Publisher
         public ActionResult Index()
         {
-            return View(db.Publishers.ToList());
+            return View(unitOfWork.PublisherRepository.Get().ToList());
         }
 
         // GET: Publisher/Details/5
@@ -28,7 +28,8 @@ namespace BookStoreWithAuthentication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Publisher publisher = db.Publishers.Find(id);
+            //Publisher publisher = db.Publishers.Find(id);
+            Publisher publisher = unitOfWork.PublisherRepository.GetByID(id);
             if (publisher == null)
             {
                 return HttpNotFound();
@@ -43,16 +44,16 @@ namespace BookStoreWithAuthentication.Controllers
         }
 
         // POST: Publisher/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,Name")] Publisher publisher)
         {
             if (ModelState.IsValid)
             {
-                db.Publishers.Add(publisher);
-                db.SaveChanges();
+                //db.Publishers.Add(publisher);
+                //db.SaveChanges();
+                unitOfWork.PublisherRepository.Insert(publisher);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
@@ -66,7 +67,8 @@ namespace BookStoreWithAuthentication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Publisher publisher = db.Publishers.Find(id);
+            //Publisher publisher = db.Publishers.Find(id);
+            Publisher publisher = unitOfWork.PublisherRepository.GetByID(id);
             if (publisher == null)
             {
                 return HttpNotFound();
@@ -75,16 +77,16 @@ namespace BookStoreWithAuthentication.Controllers
         }
 
         // POST: Publisher/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Name")] Publisher publisher)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(publisher).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(publisher).State = EntityState.Modified;
+                //db.SaveChanges();
+                unitOfWork.PublisherRepository.Update(publisher);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
             }
             return View(publisher);
@@ -97,7 +99,8 @@ namespace BookStoreWithAuthentication.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Publisher publisher = db.Publishers.Find(id);
+            //Publisher publisher = db.Publishers.Find(id);
+            Publisher publisher = unitOfWork.PublisherRepository.GetByID(id);
             if (publisher == null)
             {
                 return HttpNotFound();
@@ -110,9 +113,11 @@ namespace BookStoreWithAuthentication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Publisher publisher = db.Publishers.Find(id);
-            db.Publishers.Remove(publisher);
-            db.SaveChanges();
+            //Publisher publisher = db.Publishers.Find(id);
+            //db.Publishers.Remove(publisher);
+            //db.SaveChanges();
+            unitOfWork.PublisherRepository.Delete(id);
+            unitOfWork.Save();
             return RedirectToAction("Index");
         }
 

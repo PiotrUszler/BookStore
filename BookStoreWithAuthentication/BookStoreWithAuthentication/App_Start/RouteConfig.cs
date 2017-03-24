@@ -16,7 +16,13 @@ namespace BookStoreWithAuthentication
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Book", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Book", action = "Index", id = UrlParameter.Optional}
+            );
+
+            routes.MapRoute(
+                name: "BooksByCategory",
+                url: "{controller}/{action}/{category}",
+                defaults: new { controller = "Book", action = "Index", category = UrlParameter.Optional }
             );
         }
     }
