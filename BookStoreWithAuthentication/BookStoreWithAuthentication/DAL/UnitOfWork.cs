@@ -6,16 +6,16 @@ using System.Web;
 
 namespace BookStoreWithAuthentication.DAL
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IDisposable, IUnitOfWork
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        private GenericRepository<Category> categoryRepository;
-        private GenericRepository<Author> authorRepository;
-        private GenericRepository<Book> bookRepository;
-        private GenericRepository<Series> seriesRepository;
-        private GenericRepository<Publisher> publisherRepository;
+        private IGenericRepository<Category> categoryRepository;
+        private IGenericRepository<Author> authorRepository;
+        private IGenericRepository<Book> bookRepository;
+        private IGenericRepository<Series> seriesRepository;
+        private IGenericRepository<Publisher> publisherRepository;
 
-        public GenericRepository<Category> CategoryRepository
+        public IGenericRepository<Category> CategoryRepository
         {
             get
             {
@@ -27,7 +27,7 @@ namespace BookStoreWithAuthentication.DAL
             }
         }
 
-        public GenericRepository<Author> AuthorRepository
+        public IGenericRepository<Author> AuthorRepository
         {
             get
             {
@@ -39,7 +39,7 @@ namespace BookStoreWithAuthentication.DAL
             }
         }
 
-        public GenericRepository<Book> BookRepository
+        public IGenericRepository<Book> BookRepository
         {
             get
             {
@@ -51,7 +51,7 @@ namespace BookStoreWithAuthentication.DAL
             }
         }
 
-        public GenericRepository<Series> SeriesRepository
+        public IGenericRepository<Series> SeriesRepository
         {
             get
             {
@@ -63,7 +63,7 @@ namespace BookStoreWithAuthentication.DAL
             }
         }
 
-        public GenericRepository<Publisher> PublisherRepository
+        public IGenericRepository<Publisher> PublisherRepository
         {
             get
             {

@@ -1,5 +1,5 @@
 ﻿<div id="sidebar">
-    <p>Kategorie</p>
+    <h3 class="sidebar-headline">Kategorie</h3>
     <ul class="sidebar-nav">
         <li>
             @Html.ActionLink("Fantasy", "Index", "Book", new { category = "fantasy"}, null)
@@ -8,7 +8,7 @@
             @Html.ActionLink("Kryminał", "Index", "Book", new { category = "kryminał" }, null)
         </li>
         <li>
-            <a href="">Categoria 3</a>
+            @Html.ActionLink("Przygodowe", "Index", "Book", new { category = "przygodowa"}, null)
         </li>
     </ul>
 </div>

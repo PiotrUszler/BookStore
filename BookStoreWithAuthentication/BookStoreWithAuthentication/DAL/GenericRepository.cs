@@ -7,7 +7,7 @@ using System.Web;
 
 namespace BookStoreWithAuthentication.DAL
 {
-    public class GenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
         internal ApplicationDbContext db;
         internal DbSet<TEntity> dbSet;

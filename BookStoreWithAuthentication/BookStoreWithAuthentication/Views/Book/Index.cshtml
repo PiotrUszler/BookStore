@@ -5,63 +5,76 @@
 @{
     ViewBag.Title = "Książki";
 }
+<div class="row">
 
-<h2>Strona Główna</h2>
+    <div class="col col-md-2">
+        @Html.Partial("_SidebarPartial")
+    </div>
 
-@using (Html.BeginForm("Index", "Book", FormMethod.Get))
-{
-    <p>
-        @Html.TextBox("search", ViewBag.CurrentFilter as string)
-        <input type="submit" value="szukaj" />
-    </p>
-}
-<table class="table">
-    <tr>
-        <th>
-           
-        </th>
-        <th>
-            @Html.ActionLink("Tytuł", "Index", new { sortOrder = ViewBag.NameSortParam, currentFilter = ViewBag.CurrentFilter})
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Category.Name) <!--FirstOrDefault needed for proper working with DisplayNameFor with pagedList-->    
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstOrDefault().Authors)
-        </th>
-        <th>
-            @Html.ActionLink("Cena", "Index", new { sortOrder = ViewBag.PriceSortParam, currentFilter = ViewBag.CurrentFilter})
-        </th>
-    </tr>
+    <div class="col col-md-10">
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                <img src="@Url.Content("~/Content/Images/"+item.ImagePath)" alt="Okładka książki + @item.Title" class="img-thumbnail" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @String.Join(", ", item.Authors)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @if (HttpContext.Current.User.IsInRole("Admin")) {@Html.ActionLink("Edytuj", "Edit", new { id = item.ID })} |
-                @Html.ActionLink("Szczegóły", "Details", new { id = item.ID }) |
-                @if (HttpContext.Current.User.IsInRole("Admin")) {@Html.ActionLink("Usuń", "Delete", new { id = item.ID })}
-            </td>
-        </tr>
-    }
+        <h2>Strona Główna</h2>
 
-</table>
-<br />
-Strona @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @using (Html.BeginForm("Index", "Book", FormMethod.Get))
+        {
+            <p>
+                @Html.TextBox("search", ViewBag.CurrentFilter as string)
+                <input type="submit" value="szukaj" />
+            </p>
+        }
+        <table class="table">
+            <tr>
+                <th>
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, category = ViewBag.Category}))
+                </th>
+                <th>
+                    @Html.ActionLink("Tytuł", "Index", new { sortOrder = ViewBag.NameSortParam, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Category.Name) <!--FirstOrDefault needed for proper working with DisplayNameFor with pagedList-->
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Authors)
+                </th>
+                <th>
+                    @Html.ActionLink("Cena", "Index", new { sortOrder = ViewBag.PriceSortParam, currentFilter = ViewBag.CurrentFilter })
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@Url.Content("~/Content/Images/"+item.ImagePath)" alt="Okładka książki + @item.Title" class="img-thumbnail" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                    </td>
+                    <td>
+                        @String.Join(", ", item.Authors)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @if (HttpContext.Current.User.IsInRole("Admin"))
+                        {@Html.ActionLink("Edytuj", "Edit", new { id = item.ID })} |
+                        @Html.ActionLink("Szczegóły", "Details", new { id = item.ID }) |
+                        @if (HttpContext.Current.User.IsInRole("Admin"))
+                        {@Html.ActionLink("Usuń", "Delete", new { id = item.ID })}
+                    </td>
+                </tr>
+            }
+
+        </table>
+        <br />
+        Strona @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, category = ViewBag.Category }))
+    </div>
+</div>
+
+

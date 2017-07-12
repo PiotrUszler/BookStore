@@ -100,6 +100,7 @@ namespace BookStoreWithAuthentication.Controllers
                     }
                     catch(RetryLimitExceededException ex)
                     {
+                        Console.WriteLine(ex.Message);
                         ModelState.AddModelError("", "Nie udało się zapisać zmian.");
                     }
 

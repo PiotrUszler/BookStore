@@ -458,7 +458,7 @@ namespace BookStoreWithAuthentication.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Book");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

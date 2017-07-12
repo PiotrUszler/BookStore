@@ -171,6 +171,7 @@ namespace BookStoreWithAuthentication.Controllers
             catch(InvalidOperationException ex)
             {
                 rating = 0;
+                Console.WriteLine(ex.Message);
             }
             ViewBag.Rating = rating;
             book.Ratings.FirstOrDefault(r => r.User == this.HttpContext.User.Identity.Name ? ViewBag.UserVoted = true : ViewBag.UserVoted = false);
@@ -197,6 +198,7 @@ namespace BookStoreWithAuthentication.Controllers
             catch (InvalidOperationException ex)
             {
                 rating = 0;
+                Console.WriteLine(ex.Message);
             }
 
             return Json(new { rating = rating });
@@ -224,7 +226,7 @@ namespace BookStoreWithAuthentication.Controllers
             //db.SaveChanges();
             //bookRepo.Save();
             unitOfWork.Save();
-            return Json("");
+            return Json("Rating saved");
         }
 
         #region createBook

@@ -194,8 +194,10 @@
     <Compile Include="DAL\IAuthorRepository.cs" />
     <Compile Include="DAL\IBookRepository.cs" />
     <Compile Include="DAL\ICategoryRepository.cs" />
+    <Compile Include="DAL\IGenericRepository.cs" />
     <Compile Include="DAL\IPublisherRepository.cs" />
     <Compile Include="DAL\ISeriesRepository.cs" />
+    <Compile Include="DAL\IUnitOfWork.cs" />
     <Compile Include="DAL\PublisherRepository.cs" />
     <Compile Include="DAL\SeriesRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />

@@ -64,9 +64,7 @@ textarea {
     border: 2px solid #000000; 
 }
 
-.sidebar-nav{
-    list-style: none;
-}
+
 
 .sidebar-nav-li{
 
@@ -76,6 +74,21 @@ textarea {
     text-decoration: none;
 }
 
-#sidebar{
-    background-color: bisque;
+.sidebar-headline{
+    text-align: center;
+    color: #999999;
 }
+
+.sidebar-nav li a{
+    color: #999999;
+}
+
+.sidebar-nav ul{
+    list-style: square; 
+}
+
+#sidebar{
+    margin-top: 25px;
+    background-color: #222222;
+}
+
